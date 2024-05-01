@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-# import os
+import os
 import sys
-import openai
+from openai import AzureOpenAI
 
-openai.api_key = os.getenv("AZURE_OPENAI_KEY")
-openai.api_base = os.getenv("AZURE_OPENAI_BASE")
-openai.api_type = "azure"
-openai.api_version = "2024-02-15-preview"
+client = AzureOpenAI(
+  api_key = os.getenv("AZURE_OPENAI_API_KEY"),
+  azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"),
+  api_version = "2024-02-15-preview"
+)
 
-response = openai.ChatCompletion.create(
-    engine=os.getenv("AZURE_OPENAI_ENGINE"),
+response = client.chat.completions.create(
+    model=os.getenv("AZURE_OPENAI_MODEL"),
     temperature=0.0,
     messages=[
               {"role": "system", "content": "You are a tool designed to help users run commands in the terminal. Please provide the commands or script output in plain text without any markup. Avoid using backticks (`) around the command or a full stop (.) at the end of the line. Do not provide any explanations."},
@@ -17,4 +18,4 @@ response = openai.ChatCompletion.create(
     ],
 )
 
-print(response['choices'][0]['message']['content'])
+print(response.choices[0].message.content)
