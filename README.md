@@ -13,6 +13,10 @@ export AZURE_OPENAI_API_KEY="your_azure_openai_api_key"
 export AZURE_OPENAI_ENDPOINT="https://your_endpoint.openai.azure.com"
 export AZURE_OPENAI_MODEL="your_model"
 ```
+To use identity instead of API key, set
+```bash
+export AZURE_OPENAI_USE_IDENTITY=true
+```
 Usage example
 ```bash
 ./howto install python on ubuntu

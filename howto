@@ -3,11 +3,25 @@ import os
 import sys
 from openai import AzureOpenAI
 
-client = AzureOpenAI(
-  api_key = os.getenv("AZURE_OPENAI_API_KEY"),
-  azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"),
-  api_version = "2024-02-15-preview"
-)
+env_use_identity = os.getenv("AZURE_OPENAI_USE_IDENTITY", "false")
+use_identity = env_use_identity == 'true' or env_use_identity == '1' or env_use_identity == 'on'
+
+if use_identity:
+  from azure.identity import DefaultAzureCredential, get_bearer_token_provider
+  token_provider = get_bearer_token_provider(
+    DefaultAzureCredential(), "https://cognitiveservices.azure.com/.default"
+  )
+  client = AzureOpenAI(
+    azure_ad_token_provider = token_provider,
+    azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"),
+    api_version = "2024-02-15-preview"
+  )
+else:
+  client = AzureOpenAI(
+    api_key = os.getenv("AZURE_OPENAI_API_KEY"),
+    azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT"),
+    api_version = "2024-02-15-preview"
+  )
 
 response = client.chat.completions.create(
     model=os.getenv("AZURE_OPENAI_MODEL"),
