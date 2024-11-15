@@ -7,6 +7,7 @@ Make the file executable, optionally install it in a location accessible by PATH
 chmod +x howto
 sudo cp howto /usr/local/bin/
 ```
+Make sure you have `openai` python module installed (`pip install openai`). Optionally, install `azure.identity` module if you plan to use identity to authenticate to Azure OpenAI resource (`pip install azure-identity`).
 Set up Azure OpenAI parameters (can be placed e.g. in ~/.bash_profile)
 ```bash
 export AZURE_OPENAI_API_KEY="your_azure_openai_api_key"
